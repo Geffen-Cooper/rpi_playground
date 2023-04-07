@@ -1,7 +1,11 @@
 import cv2
 import time
 import numpy as np
-#import matplotlib.pyplot as plt
+#import picamera
+
+#camera = picamera.PiCamera()
+#camera.awb_mode='off'
+#camera.close()
 
 # init rect
 RECT_W = 50
@@ -14,6 +18,9 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH,320)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
 FRAME_W = cap.get(cv2.CAP_PROP_FRAME_WIDTH) 
 FRAME_H = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) 
+
+#cap.set(cv2.CAP_PROP_AUTO_EXPOSURE,0.75)
+cap.set(cv2.CAP_PROP_EXPOSURE,80)
 
 # create a window
 cv2.namedWindow("("+str(int(FRAME_W))+"x"+str(int(FRAME_H))+")", cv2.WINDOW_NORMAL)
@@ -42,6 +49,7 @@ if not ret:
 
 # flip horizontally
 img = cv2.flip(img,1)
+#img = cv2.resize(img,(FRAME_W,FRAME_H))
 last_rect_px = img[start_point[1]:end_point[1],start_point[0]:end_point[0]]
 
 
@@ -101,6 +109,7 @@ while True:
     if not ret:
         raise RuntimeError("failed to read frame")
 
+    #img = cv2.resize(img,(FRAME_W,FRAME_H))
     # flip horizontally
     #img = cv2.flip(img,1)
     img = cv2.flip(img,0)
@@ -230,14 +239,14 @@ while True:
     # img, text, location of BLC, font, size, color, thickness, linetype
     cv2.putText(img_disp, "FPS: " +fps, (7, 30), font, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
     #print("FPS:",fps)
-    cv2.putText(img_disp, "Avg. Error:", ((300-40)//2, 23), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+    cv2.putText(img_disp, "Error:", ((300-40)//2, 23), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
     cv2.rectangle(img_disp,((300+50)//2,8),((620)//2,30),(0,0,0),1)
     cv2.rectangle(img_disp,((304+50)//2,12),((304+50+int((615-305-50)*running_l1/100))//2,26),box_color,-1)
     cv2.rectangle(img_disp,((300+50)//2,8),((305+50+int((615-305-50)*10/100))//2,30),(0,0,0),1)
 
-    #cv2.putText(img_disp, "Avg. Diffs: "+str(round(running_count,1)), (300-90, 23+32), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-    #cv2.rectangle(img_disp,(300+50,8+30),(620,30+30),(0,0,0),1)
-    #cv2.rectangle(img_disp,(304+50,12+30),(304+50+int((615-305)*running_count/500),26+30),(0,0,0),-1)
+    cv2.putText(img_disp, "Diffs: "+str(round(running_count,1)), ((300-90)//2, 23+32), font, 0.42, (0, 0, 0), 1, cv2.LINE_AA)
+    cv2.rectangle(img_disp,((300+50)//2,8+30),(620//2,30+30),(0,0,0),1)
+    cv2.rectangle(img_disp,((304+50)//2,12+30),((304+50+int((615-305)*running_count/500))//2,26+30),(0,0,0),-1)
     cv2.imshow("("+str(int(FRAME_W))+"x"+str(int(FRAME_H))+")",img_disp)
 
     # get key
