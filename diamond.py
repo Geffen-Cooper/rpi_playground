@@ -1,15 +1,17 @@
 import cv2
 import time
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 # init rect
-RECT_W = 75
-RECT_H = 75
-SEARCH_SIZE = 50
+RECT_W = 50
+RECT_H = 50
+SEARCH_SIZE = 75
 
 # initialize the capture object
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(-1)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH,320)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
 FRAME_W = cap.get(cv2.CAP_PROP_FRAME_WIDTH) 
 FRAME_H = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) 
 
@@ -205,13 +207,15 @@ while True:
     if not first_frame:
         last_rect_px = first_rect
     # cv2.imwrite("last.png",last_rect_px)
-    print(time.time()-p1)
-    #overlay = img.copy()
-    #img_disp = img.copy()
-    #cv2.rectangle(overlay, start_point-SEARCH_SIZE, end_point+SEARCH_SIZE, box_color, -1)
-    #img = cv2.addWeighted(overlay, 0.1, img, 1 - 0.1, 0)
+    #print(time.time()-p1)
+    overlay = img.copy()
+    img_disp = img.copy()
+    cv2.rectangle(overlay, (start_point[0]-SEARCH_SIZE,start_point[1]-SEARCH_SIZE), (end_point[0]+SEARCH_SIZE,end_point[1]+SEARCH_SIZE), box_color, -1)
+    img_disp = cv2.addWeighted(overlay, 0.1, img_disp, 1 - 0.1, 0)
     #cv2.putText(img_disp,str(x_off)+","+str(y_off),start_point-10,font, 1, (0, 0, 0), 1, cv2.LINE_AA)
-    cv2.rectangle(img, (start_point[0],start_point[1]), end_point, box_color, 4)
+    #print(start_point,end_point,box_color)
+    cv2.rectangle(img_disp, (start_point[0],start_point[1]), (end_point[0],end_point[1]), box_color, 2)
+    #cv2.rectangle(img,(0,0),(100,100),(255,0,0),4)
     #cv2.arrowedLine(img_disp, (start_point[0]-x_off,start_point[1]-y_off), start_point,(0, 0, 0), 3)
   
     # calculate the fps
@@ -224,17 +228,17 @@ while True:
         frame_count = 0
 
     # img, text, location of BLC, font, size, color, thickness, linetype
-    #cv2.putText(img, "FPS: " +fps, (7, 30), font, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
-    print("FPS:",fps)
-    #cv2.putText(img_disp, "Avg. Error:", (300-40, 23), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-    #cv2.rectangle(img_disp,(300+50,8),(620,30),(0,0,0),1)
-    #cv2.rectangle(img_disp,(304+50,12),(304+50+int((615-305-50)*running_l1/100),26),box_color,-1)
-    #cv2.rectangle(img_disp,(300+50,8),(305+50+int((615-305-50)*10/100),30),(0,0,0),1)
+    cv2.putText(img_disp, "FPS: " +fps, (7, 30), font, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
+    #print("FPS:",fps)
+    cv2.putText(img_disp, "Avg. Error:", ((300-40)//2, 23), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+    cv2.rectangle(img_disp,((300+50)//2,8),((620)//2,30),(0,0,0),1)
+    cv2.rectangle(img_disp,((304+50)//2,12),((304+50+int((615-305-50)*running_l1/100))//2,26),box_color,-1)
+    cv2.rectangle(img_disp,((300+50)//2,8),((305+50+int((615-305-50)*10/100))//2,30),(0,0,0),1)
 
     #cv2.putText(img_disp, "Avg. Diffs: "+str(round(running_count,1)), (300-90, 23+32), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
     #cv2.rectangle(img_disp,(300+50,8+30),(620,30+30),(0,0,0),1)
     #cv2.rectangle(img_disp,(304+50,12+30),(304+50+int((615-305)*running_count/500),26+30),(0,0,0),-1)
-    cv2.imshow("("+str(int(FRAME_W))+"x"+str(int(FRAME_H))+")",img)
+    cv2.imshow("("+str(int(FRAME_W))+"x"+str(int(FRAME_H))+")",img_disp)
 
     # get key
     k = cv2.waitKey(1)

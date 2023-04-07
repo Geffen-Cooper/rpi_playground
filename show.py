@@ -1,5 +1,5 @@
 import cv2
-from PIL import Image
+#from PIL import Image
 
 cap = cv2.VideoCapture(-1)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 64)
