@@ -104,6 +104,7 @@ while True:
     img = cv2.flip(img,0)
     # === Rectangle tracking update ===
     # update position
+    p1 = time.time()
     if start_tracking:
         l1 = np.ones(9)*1e9
         count = 0
@@ -112,6 +113,7 @@ while True:
         y_off = 0
         search_locs = all_search_locs
         next_dir = -1
+
 
         # keep running the search as long as in the search space
         while y_off >= -SEARCH_SIZE and y_off <= SEARCH_SIZE and x_off >= -SEARCH_SIZE and x_off <= SEARCH_SIZE:
@@ -137,7 +139,7 @@ while True:
             # update current offset
             if last_dir == 0: # we handle the center case differently since the inner diamond is different
                 if next_dir != 0: # only add an offset if not in the center
-                    print(next_dir)
+                    #print(next_dir)
                     x_off += c_search_locs[next_dir-1][1]
                     y_off += c_search_locs[next_dir-1][0] 
             else:
@@ -203,11 +205,11 @@ while True:
     if not first_frame:
         last_rect_px = first_rect
     # cv2.imwrite("last.png",last_rect_px)
-    
-    overlay = img.copy()
+    print(time.time()-p1)
+    #overlay = img.copy()
     #img_disp = img.copy()
-    cv2.rectangle(overlay, start_point-SEARCH_SIZE, end_point+SEARCH_SIZE, box_color, -1)
-    img = cv2.addWeighted(overlay, 0.1, img, 1 - 0.1, 0)
+    #cv2.rectangle(overlay, start_point-SEARCH_SIZE, end_point+SEARCH_SIZE, box_color, -1)
+    #img = cv2.addWeighted(overlay, 0.1, img, 1 - 0.1, 0)
     #cv2.putText(img_disp,str(x_off)+","+str(y_off),start_point-10,font, 1, (0, 0, 0), 1, cv2.LINE_AA)
     cv2.rectangle(img, (start_point[0],start_point[1]), end_point, box_color, 4)
     #cv2.arrowedLine(img_disp, (start_point[0]-x_off,start_point[1]-y_off), start_point,(0, 0, 0), 3)
@@ -222,8 +224,8 @@ while True:
         frame_count = 0
 
     # img, text, location of BLC, font, size, color, thickness, linetype
-    cv2.putText(img, "FPS: " +fps, (7, 30), font, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
-    
+    #cv2.putText(img, "FPS: " +fps, (7, 30), font, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
+    print("FPS:",fps)
     #cv2.putText(img_disp, "Avg. Error:", (300-40, 23), font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
     #cv2.rectangle(img_disp,(300+50,8),(620,30),(0,0,0),1)
     #cv2.rectangle(img_disp,(304+50,12),(304+50+int((615-305-50)*running_l1/100),26),box_color,-1)
