@@ -26,8 +26,8 @@ preprocess = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
-s_net = models.quantization.mobilenet_v3_large(weights='DEFAULT',quantize=True)
-t_net = models.quantization.mobilenet_v3_large(weights='DEFAULT',quantize=False)
+t_net = models.efficientnet_b0(weights='DEFAULT')
+s_net = models.shufflenet_v2_x0_5(weights='DEFAULT')
 # net = models.shufflenet_v2_x0_5()
 # net = models.mobilenet_v2(num_classes=10,width_mult=0.1)
 #net = models.mobilenet_v3_large(width_mult=0.5)
