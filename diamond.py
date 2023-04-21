@@ -19,8 +19,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
 FRAME_W = cap.get(cv2.CAP_PROP_FRAME_WIDTH) 
 FRAME_H = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) 
 
-#cap.set(cv2.CAP_PROP_AUTO_EXPOSURE,0.75)
-cap.set(cv2.CAP_PROP_EXPOSURE,80)
+cap.set(cv2.CAP_PROP_AUTO_EXPOSURE,0.75)
+#cap.set(cv2.CAP_PROP_EXPOSURE,80)
 
 # create a window
 cv2.namedWindow("("+str(int(FRAME_W))+"x"+str(int(FRAME_H))+")", cv2.WINDOW_NORMAL)
@@ -219,7 +219,7 @@ while True:
     #print(time.time()-p1)
     overlay = img.copy()
     img_disp = img.copy()
-    cv2.rectangle(overlay, (start_point[0]-SEARCH_SIZE,start_point[1]-SEARCH_SIZE), (end_point[0]+SEARCH_SIZE,end_point[1]+SEARCH_SIZE), box_color, -1)
+    cv2.rectangle(overlay, (start_point[0]-SEARCH_SIZE+RECT_W//2,start_point[1]-SEARCH_SIZE+RECT_H//2), (end_point[0]+SEARCH_SIZE-RECT_W//2,end_point[1]+SEARCH_SIZE-RECT_H//2), box_color, -1)
     img_disp = cv2.addWeighted(overlay, 0.1, img_disp, 1 - 0.1, 0)
     #cv2.putText(img_disp,str(x_off)+","+str(y_off),start_point-10,font, 1, (0, 0, 0), 1, cv2.LINE_AA)
     #print(start_point,end_point,box_color)
