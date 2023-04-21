@@ -6,7 +6,7 @@ torch.backends.quantized.engine = 'qnnpack'
 model = models.shufflenet_v2_x0_5().eval()
 model = models.quantization.mobilenet_v2(quantize=True)
 
-#model = torch.jit.script(model)
+model = torch.jit.script(model)
 torch.set_num_threads(2)
 rand = torch.rand(1,3,224,224)
 
